@@ -54,7 +54,7 @@ for item in csm_data:
         profit = float(csm_price)*0.95 - float(lsk_price)*1.05
 
         csm_hashname = item.replace('|', "%7C").replace("(", "%28").replace(")", "%29").replace(" ", "%20")
-        lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27')
+        lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27').replace("™", "")
 
         lsk_url = f"https://lis-skins.com/market/csgo/{lsk_hashname}"
         csm_url = f"https://market.csgo.com/en/{csm_hashname}"
