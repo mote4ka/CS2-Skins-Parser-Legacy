@@ -1,0 +1,6 @@
+requests
+re
+json
+xlrd
+xlwt
+xlutils.copy

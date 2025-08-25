@@ -1,10 +1,3 @@
-from bs4 import BeautifulSoup
-import json
-import requests
-import cloudscraper
-import time
-import io
-import random
 import sys
 
 import xlrd
@@ -59,8 +52,6 @@ for item in csm_data:
         csm_volume = csm_data.get(item).get('volume')
 
         profit = float(csm_price)*0.95 - float(lsk_price)*1.05
-
-        #print(item, lsk_price, csm_price, profit)
 
         csm_hashname = item.replace('|', "%7C").replace("(", "%28").replace(")", "%29").replace(" ", "%20")
         lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27')

@@ -1,6 +1,4 @@
-import io
 import json
-import ijson
 import re
 import requests
 
