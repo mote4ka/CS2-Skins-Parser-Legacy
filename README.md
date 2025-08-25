@@ -3,7 +3,7 @@
 <br>
 <h2>Setup Giude</h2>
 <p>Create config.py file in directory. Set <i>csm_apikey</i> - your CSMarker api key and <i>lsk_apikey</i> - your Lis-Skins api key.</p>
-<p>Set <i>usdrub</i> USD price,. Also you can set <i>low_filter</i> and <i>high_filter</i> if you nedd to filter price.</p>
+<p>Set <i>usdrub</i> USD price. Also you need set <i>low_filter</i> and <i>high_filter</i> if you nedd to filter price.</p>
 <img width="466" height="164" alt="configsetup" src="https://github.com/user-attachments/assets/f5b372c8-8367-4f78-a45f-522e8eb67d0d" />
 <br>
 <h2>Using Guide</h2>
