@@ -7,7 +7,7 @@
 <p><i><b>Output example file</b></i></p>
 <img width="711" height="531" alt="image" src="https://github.com/user-attachments/assets/eda8b207-8480-4161-9e6b-cd1c06d1faaa" />
 <br>
-<p>By clicking on <i>"Buy Price"</i> or <i>"Sell Price"</i>, you will be rederected to Lis-Skins or CSMarket site.</p>
+<p>By clicking on <i>"Buy Price"</i> or <i>"Sell Price"</i>, you will be redirected to Lis-Skins or CSMarket site.</p>
 
 <br>
 <br>
