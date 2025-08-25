@@ -1,4 +1,4 @@
-<h1>CS2 Skins Parser by <i>mote4ka23</i></h1>
+<h1>CS2 Skins Parser</h1>
 <p>This code parse Lis-Skins and CSMarket to find best skins to buy and sell.</p>
 <br>
 <h2>Setup Giude</h2>
