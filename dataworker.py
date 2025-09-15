@@ -6,44 +6,172 @@ import sys
 
 from config import *
 
+def pre_process_json(content, remove_tags):
+
+    if content.startswith("b'") or content.startswith('b"'):
+        content = content[2:-1]
+
+    content = re.sub(r"\\'", "'", content)
+
+    for field in remove_tags:
+        patterns = [
+            f'"{field}"\\s*:\\s*[^,}}]*,?',  # простые значения
+            f'"{field}"\\s*:\\s*"[^"]*",?',   # строковые значения
+            f'"{field}"\\s*:\\s*\\d+,?',      # числовые значения
+            f'"{field}"\\s*:\\s*null,?',      # null значения
+            f'"{field}"\\s*:\\s*\\[.*?\\],?'  # массивы
+        ]
+        
+        for pattern in patterns:
+            content = re.sub(pattern, '', content, flags=re.DOTALL | re.IGNORECASE)
+    
+    content = re.sub(r'\"\]\}(\s*,)?', '"}\1', content)  # "]} -> "}
+    content = re.sub(r'\"\}\](\s*,)?', '"}\1', content)  # "}] -> "}
+
+    content = re.sub(r',\s*}', '}', content)
+    content = re.sub(r',\s*]', ']', content)
+
+    content = re.sub(r'(\"items\"\s*:\s*\[)[^]]*$', r'\1]}', content)
+
+    p = re.compile('(?<!\\\\)\'')
+    content = p.sub('\"', content)
+
+    return content
+
+def fix_json(content, output_file):
+    try:
+        objects = re.findall(r'\{[^{}]*\}', content)
+        items = []
+        
+        for obj in objects:
+            try:
+                item_data = json.loads(obj)
+                if 'name' in item_data and 'price' in item_data:
+                    items.append({"name": item_data['name'].replace("\\u2122", "™").replace("\\u2605","★"), "price": item_data['price']})
+            except:
+                continue
+        
+        new_json = {"status": "success", "items": items}
+        
+        with open(output_file, 'w', encoding='utf-8') as file:
+            json.dump(new_json, file, ensure_ascii=False, indent=2)
+        return True
+        
+    except Exception as e:
+        print(f"JSON file broken: {e}")
+
+def csm_data_preprocess(output_file):
+    # get whitelist
+    with open('whitelist.txt', 'r',encoding='utf-8') as file:
+        whitelist = file.read().splitlines()
 
 
-def csm_data_process(output_file):
-
-    # collect data from api
+    ####
+    #### Get Price and Volume
+    ####
     req = requests.get("https://market.csgo.com/api/v2/prices/RUB.json")
     items = req.json().get('items')
-    
-    counter = 0
-    skipped_counter = 0
+
     result_dict = {}
-
-    # get ignore names
-    with open('ignorelist.txt', 'r',encoding='utf-8') as file:
-        ignorelist = file.read().splitlines()
-
-    # loop for each item in collected items
     for item in items:
         
         name = item.get('market_hash_name')
         # check if item in ignore list
-        if any(ignore_word in name for ignore_word in ignorelist):
-            skipped_counter +=1
-        else:
-            if float(item.get('price')) >= low_filter and float(item.get('price')) <= high_filter:
-                # add item in dict with volume and price
-                result_dict[name] = {'price' : item.get('price'),
+        #if any(white_word in name for white_word in whitelist):
+            #if float(item.get('price')) >= low_filter and float(item.get('price')) <= high_filter:
+            # add item in dict with volume and price
+        result_dict[name] = {'price' : item.get('price'),
                                 'volume': item.get('volume')}
         
                 # increment counter
-                counter += 1
-
+        # else:
+        #     continue
+            
     # save dict to file
-    with open(output_file, 'w', encoding='utf-8') as file:
+    with open("temp/csm_part1.json", 'w', encoding='utf-8') as file:
         json.dump(result_dict, file, ensure_ascii=False, indent=2)
 
-    # print items amount
-    print(f"CSM saved {counter} items, skipped {skipped_counter} items")
+    ####
+    #### Get avg_price, buy_order
+    ####
+
+    # collect data from api
+    req = requests.get("https://market.csgo.com/api/v2/prices/class_instance/RUB.json")
+    with open(output_file, "w", encoding="utf-8") as file:
+        file.write(str(req.content))
+    with open(output_file, "r", encoding="utf-8") as file:
+        content = file.read().strip()
+    
+    remove_tags = [
+        
+        'ru_name',
+        'ru_rarity',
+        'ru_quality',
+        'text_color',
+        'bg_color',
+        'phase'
+    ]
+
+    content = pre_process_json(content, remove_tags)
+
+    
+    with open("temp/csm_part1.json", "r", encoding="utf-8") as file:
+        data1 = json.loads(file.read())
+
+    try:
+        objects = re.findall(r'\{[^{}]*\}', content)
+        items = []
+        
+        for obj in objects:
+            try:
+                item_data = json.loads(obj)
+                if 'market_hash_name' in item_data and 'price' in item_data and 'avg_price' in item_data and 'buy_order' in item_data and item_data['avg_price'] != None:
+                    name = item_data['market_hash_name']
+                    if any(white_word in name for white_word in whitelist):
+                        items.append({"name": name, "price": data1.get(name).get('price'), "avg_price": item_data['avg_price'], "buy_order": item_data['buy_order'], "volume": data1.get(name).get('volume')})
+                    else:
+                        continue
+                        # if name != "Sticker" and name != "Charm":
+                        #     print(name)
+            except:
+                #print(f"||{name}||")
+                continue
+
+        new_json = {"status": "success", "items": items}
+        
+        with open(output_file, 'w', encoding='utf-8') as file:
+            json.dump(new_json, file, ensure_ascii=False, indent=2)
+        return True
+        
+    except Exception as e:
+        print(f"JSON file broken: {e}")
+
+def csm_data_process(input_file, output_file):
+    with open(input_file, "r", encoding="utf-8") as file:
+        items = json.loads(file.read()).get('items')
+    
+    counter = 0
+    result_dict = {}
+    names = []
+    for item in items:
+        name = item.get('name')
+        price = float(item.get('price'))
+        if price >= low_filter and price <= high_filter:
+            if name in names:
+                if price < result_dict[name].get('price'):
+                    result_dict[name]['price'] = price
+                if item.get('avg_price') < result_dict[name].get('avg_price'):
+                    result_dict[name]['avg_price'] = item.get('avg_price')
+                if item.get('buy_order') > result_dict[name].get('buy_order'):
+                    result_dict[name]['buy_order'] = item.get('buy_order')
+            else:
+                counter += 1
+                result_dict[name] = {"price": price, "avg_price": float(item.get('avg_price')), "buy_order": item.get('buy_order'), "volume": float(item.get('volume'))}
+
+    with open(output_file, 'w', encoding='utf-8') as file:
+            json.dump(result_dict, file, ensure_ascii=False, indent=2)
+
+    print(f"CSM saved, {len(result_dict)} items")
 
 def lsk_get_data(output_file):
     with open(output_file, "w", encoding="utf-8") as file:
@@ -98,17 +226,13 @@ def lsk_process_data(input_file, output_file):
 
     with open(output_file, "r", encoding="utf-8") as file:
         content = file.read()
-
-    if content.startswith("b'") or content.startswith('b"'):
-        content = content[2:-1]
-    
+   
     content = re.sub(r'"name":"([^"]*)\"}\]\},', r'"name":"\1"},', content)
 
     content = re.sub(r'"name":"([^"]*)\"}\],', r'"name":"\1"},', content)
     content = re.sub(r'"name":"([^"]*)\"}\]', r'"name":"\1"}', content)
 
-    content = re.sub(r"\\'", "'", content)
-    fields_to_remove = [
+    remove_tags = [
         
         'id',
         'stickers',
@@ -126,29 +250,7 @@ def lsk_process_data(input_file, output_file):
         'slot'
     ]
     
-    for field in fields_to_remove:
-        patterns = [
-            f'"{field}"\\s*:\\s*[^,}}]*,?',  # простые значения
-            f'"{field}"\\s*:\\s*"[^"]*",?',   # строковые значения
-            f'"{field}"\\s*:\\s*\\d+,?',      # числовые значения
-            f'"{field}"\\s*:\\s*null,?',      # null значения
-            f'"{field}"\\s*:\\s*\\[.*?\\],?'  # массивы
-        ]
-        
-        for pattern in patterns:
-            content = re.sub(pattern, '', content, flags=re.DOTALL | re.IGNORECASE)
-    
-    # cleaning json file
-    content = re.sub(r'\"\]\}(\s*,)?', '"}\1', content)  # "]} -> "}
-    content = re.sub(r'\"\}\](\s*,)?', '"}\1', content)  # "}] -> "}
-
-    content = re.sub(r',\s*}', '}', content)
-    content = re.sub(r',\s*]', ']', content)
-
-    content = re.sub(r'(\"items\"\s*:\s*\[)[^]]*$', r'\1]}', content)
-
-    p = re.compile('(?<!\\\\)\'')
-    content = p.sub('\"', content)
+    content = pre_process_json(content, remove_tags)
 
     # save
     with open(output_file, 'w', encoding='utf-8') as file:
@@ -156,34 +258,17 @@ def lsk_process_data(input_file, output_file):
 
 
     # fix json file
-    try:
-        objects = re.findall(r'\{[^{}]*\}', content)
-        items = []
-        
-        for obj in objects:
-            try:
-                item_data = json.loads(obj)
-                if 'name' in item_data and 'price' in item_data:
-                    items.append({"name": item_data['name'].replace("\\u2122", "™").replace("\\u2605","★"), "price": item_data['price']})
-            except:
-                continue
-        
-        new_json = {"status": "success", "items": items}
-        
-        with open(output_file, 'w', encoding='utf-8') as file:
-            json.dump(new_json, file, ensure_ascii=False, indent=2)
-        return True
-        
-    except Exception as e:
-        print(f"JSON file broken: {e}")
+    fix_json(content, output_file)
 
     print("lsk data processed!")
-
-
 
 def lsk_data_parse(input_file, output_file):
     
     result_dict = {}
+
+    # get whitelist
+    with open('whitelist.txt', 'r',encoding='utf-8') as file:
+        whitelist = file.read().splitlines()
 
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
         items = json.loads(file.read()).get('items')
@@ -192,12 +277,13 @@ def lsk_data_parse(input_file, output_file):
             try:
                 if isinstance(item, dict) and 'name' in item and 'price' in item:
                     name = str(item['name'])
-                    price = item['price']
-                    
-                    if name not in result_dict:
-                        result_dict[name] = price
-                    else:
-                        print("skip")
+                    if any(white_word in name for white_word in whitelist):
+                        price = item['price']
+                        
+                        if name not in result_dict:
+                            result_dict[name] = price
+                        else:
+                            continue
             except:
                 continue
 
@@ -210,19 +296,21 @@ def lsk_data_parse(input_file, output_file):
     print(f"Lsk saved {len(result_dict)} items")
 
 # args handler
-if 'csm' in sys.argv:
-    csm_data_process('temp/csm_data.json')
-if 'lskgetdata' in sys.argv:
+if '-csm' in sys.argv:
+    csm_data_preprocess('temp/csm_cache.json')
+    csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
+if '-lskgetdata' in sys.argv:
     lsk_get_data('temp/lsk_rawdata.json')
-if 'lskprocessdata' in sys.argv:
+if '-lskprocessdata' in sys.argv:
     lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
-if 'lskparse' in sys.argv:
+if '-lskparse' in sys.argv:
     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
-if 'lsk' in sys.argv:
+if '-lsk' in sys.argv:
     lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
 if '-full' in sys.argv:
-    csm_data_process('temp/csm_data.json')
+    csm_data_preprocess('temp/csm_cache.json')
+    csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
     lsk_get_data('temp/lsk_rawdata.json')
     lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')

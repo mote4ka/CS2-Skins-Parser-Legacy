@@ -1,8 +1,5 @@
 *.xls
 *.pyc
+*.json
 
-temp/csm_data.json
-temp/lsk_data.json
-temp/lsk_processed.json
-temp/lsk_rawdata.json
 config.py
