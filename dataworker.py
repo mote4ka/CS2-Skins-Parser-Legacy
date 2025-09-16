@@ -171,7 +171,7 @@ def csm_data_process(input_file, output_file):
     with open(output_file, 'w', encoding='utf-8') as file:
             json.dump(result_dict, file, ensure_ascii=False, indent=2)
 
-    print(f"CSM saved, {len(result_dict)} items")
+    print(f"CSM saved {len(result_dict)} items")
 
 def lsk_get_data(output_file):
     with open(output_file, "w", encoding="utf-8") as file:

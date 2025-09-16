@@ -48,7 +48,6 @@ ws.col(9).width = 256*8
 
 lsk_data = get_lsk_data()
 csm_data = get_csm_data()
-print(len(csm_data), len(lsk_data))
 i=0
 for item in csm_data:
     
