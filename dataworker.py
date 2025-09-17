@@ -6,6 +6,7 @@ import sys
 
 from config import *
 
+# json stuuf made by deepseek
 def pre_process_json(content, remove_tags):
 
     if content.startswith("b'") or content.startswith('b"'):
@@ -60,6 +61,8 @@ def fix_json(content, output_file):
     except Exception as e:
         print(f"JSON file broken: {e}")
 
+
+# 
 def csm_data_preprocess(output_file):
     # get whitelist
     with open('whitelist.txt', 'r',encoding='utf-8') as file:
@@ -69,24 +72,17 @@ def csm_data_preprocess(output_file):
     ####
     #### Get Price and Volume
     ####
+    # request to csm api
     req = requests.get("https://market.csgo.com/api/v2/prices/RUB.json")
     items = req.json().get('items')
 
+    # collect and save to dict ask price & volume
     result_dict = {}
     for item in items:
-        
         name = item.get('market_hash_name')
-        # check if item in ignore list
-        #if any(white_word in name for white_word in whitelist):
-            #if float(item.get('price')) >= low_filter and float(item.get('price')) <= high_filter:
-            # add item in dict with volume and price
         result_dict[name] = {'price' : item.get('price'),
                                 'volume': item.get('volume')}
         
-                # increment counter
-        # else:
-        #     continue
-            
     # save dict to file
     with open("temp/csm_part1.json", 'w', encoding='utf-8') as file:
         json.dump(result_dict, file, ensure_ascii=False, indent=2)
@@ -95,13 +91,14 @@ def csm_data_preprocess(output_file):
     #### Get avg_price, buy_order
     ####
 
-    # collect data from api
+    # collect data from api (output large json file with many duplicates)
     req = requests.get("https://market.csgo.com/api/v2/prices/class_instance/RUB.json")
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(str(req.content))
     with open(output_file, "r", encoding="utf-8") as file:
         content = file.read().strip()
     
+    # useless tags what needs to be removed
     remove_tags = [
         
         'ru_name',
@@ -112,6 +109,7 @@ def csm_data_preprocess(output_file):
         'phase'
     ]
 
+    # delete tags in json file
     content = pre_process_json(content, remove_tags)
 
     
@@ -122,6 +120,7 @@ def csm_data_preprocess(output_file):
         objects = re.findall(r'\{[^{}]*\}', content)
         items = []
         
+        # main loop / seek for objects and write values to dict
         for obj in objects:
             try:
                 item_data = json.loads(obj)
@@ -131,14 +130,13 @@ def csm_data_preprocess(output_file):
                         items.append({"name": name, "price": data1.get(name).get('price'), "avg_price": item_data['avg_price'], "buy_order": item_data['buy_order'], "volume": data1.get(name).get('volume')})
                     else:
                         continue
-                        # if name != "Sticker" and name != "Charm":
-                        #     print(name)
             except:
-                #print(f"||{name}||")
                 continue
 
+        # create new json and write items for furures needs
         new_json = {"status": "success", "items": items}
         
+        # write json to file
         with open(output_file, 'w', encoding='utf-8') as file:
             json.dump(new_json, file, ensure_ascii=False, indent=2)
         return True
@@ -146,6 +144,8 @@ def csm_data_preprocess(output_file):
     except Exception as e:
         print(f"JSON file broken: {e}")
 
+
+# process previous data and make final dict that will be used in parser.py
 def csm_data_process(input_file, output_file):
     with open(input_file, "r", encoding="utf-8") as file:
         items = json.loads(file.read()).get('items')
@@ -156,29 +156,29 @@ def csm_data_process(input_file, output_file):
     for item in items:
         name = item.get('name')
         price = float(item.get('price'))
-        if price >= low_filter and price <= high_filter:
-            if name in names:
-                if price < result_dict[name].get('price'):
-                    result_dict[name]['price'] = price
-                if item.get('avg_price') < result_dict[name].get('avg_price'):
-                    result_dict[name]['avg_price'] = item.get('avg_price')
-                if item.get('buy_order') > result_dict[name].get('buy_order'):
-                    result_dict[name]['buy_order'] = item.get('buy_order')
-            else:
-                counter += 1
-                result_dict[name] = {"price": price, "avg_price": float(item.get('avg_price')), "buy_order": item.get('buy_order'), "volume": float(item.get('volume'))}
+        if name in names:
+            if price < result_dict[name].get('price'):
+                result_dict[name]['price'] = price
+            if item.get('avg_price') < result_dict[name].get('avg_price'):
+                result_dict[name]['avg_price'] = item.get('avg_price')
+            if item.get('buy_order') > result_dict[name].get('buy_order'):
+                result_dict[name]['buy_order'] = item.get('buy_order')
+        else:
+            counter += 1
+            result_dict[name] = {"price": price, "avg_price": float(item.get('avg_price')), "buy_order": item.get('buy_order'), "volume": float(item.get('volume'))}
 
     with open(output_file, 'w', encoding='utf-8') as file:
             json.dump(result_dict, file, ensure_ascii=False, indent=2)
 
     print(f"CSM saved {len(result_dict)} items")
-
+# just collecting raw data from lis skins api
 def lsk_get_data(output_file):
     with open(output_file, "w", encoding="utf-8") as file:
         req = requests.get("https://lis-skins.com/market_export_json/api_csgo_full.json")
         file.write(str(req.content))
     print("lsk data collected!")
 
+# preparing lsk data for parsing in next step
 def lsk_process_data(input_file, output_file):
 
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
@@ -262,6 +262,7 @@ def lsk_process_data(input_file, output_file):
 
     print("lsk data processed!")
 
+# lsk final step. output is pure data that wil be used in parser.py
 def lsk_data_parse(input_file, output_file):
     
     result_dict = {}

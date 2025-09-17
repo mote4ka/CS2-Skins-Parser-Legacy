@@ -4,6 +4,8 @@ import xlrd
 import xlwt
 from xlutils.copy import copy
 
+import os
+
 from data import *
 
 from config import *
@@ -11,12 +13,20 @@ from config import *
 if '-full' in sys.argv:
     from dataworker import *
 
-rb = xlrd.open_workbook('output.xls')
+# check if output file already exist, if not create one
+if os.path.exists("output.xls"):
+    rb = xlrd.open_workbook('output.xls')
+    wb = copy(rb)
+else:
+    wb = xlwt.Workbook()
+    wb.add_sheet("List 1")
+    wb.save("output.xls")
 
-wb = copy(rb)
 
 ws = wb.get_sheet(0)
 
+
+# styles
 xlwt.add_palette_colour("custom_link", 0x21) 
 wb.set_colour_RGB(0x21, 155, 194, 230) 
 style_bg_link = xlwt.easyxf('pattern: pattern solid, fore_colour custom_link; align: horiz center, vert center, wrap on; font: italic on')
@@ -25,6 +35,7 @@ style_value = xlwt.easyxf('align: horiz center, vert centre; font: italic on')
 style_header = xlwt.easyxf('align: horiz center, vert centre; font: bold on, italic on')
 
 
+# columns names & size
 ws.write(0,0, "Name",style_header)
 ws.col(0).width = 256*50
 ws.write(0,1, "Buy Price",style_header)
@@ -46,29 +57,34 @@ ws.col(8).width = 256*10
 ws.write(0,9, "Volume",style_header)
 ws.col(9).width = 256*8
 
+# get data from dataworker
 lsk_data = get_lsk_data()
 csm_data = get_csm_data()
 i=0
+
+
 for item in csm_data:
-    
 
     if lsk_data.get(item) != None:
         lsk_price = float(lsk_data.get(item))*usdrub
 
+        # get values from data
         ask_price = float(csm_data.get(item).get('price'))
         avg_price = float(csm_data.get(item).get('avg_price'))
         buy_order_price = float(csm_data.get(item).get('buy_order'))
         csm_volume = float(csm_data.get(item).get('volume'))
 
         profit = float(ask_price)*0.95 - float(lsk_price)*1.05
-        avg_profit = float(avg_price)*0.95 - float(lsk_price)*1.05
+        avg_profit = float(avg_price)*0.95 - float(lsk_price)*1.0
 
+        # make hyperllink
         csm_hashname = item.replace('|', "%7C").replace("(", "%28").replace(")", "%29").replace(" ", "%20")
         lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27').replace("™", "")
 
         lsk_url = f"https://lis-skins.com/market/csgo/{lsk_hashname}"
         csm_url = f"https://market.csgo.com/en/{csm_hashname}"
 
+        # write to file
         ws.write(i+1,0, item, style_name)
         ws.write(i+1,1, xlwt.Formula(f'HYPERLINK("{lsk_url}", {round(lsk_price,1)})'),style_bg_link)
         ws.write(i+1,2, xlwt.Formula(f'HYPERLINK("{csm_url}", {round(ask_price,1)})'),style_bg_link)
