@@ -64,9 +64,9 @@ def fix_json(content, output_file):
 
 # 
 def csm_data_preprocess(output_file):
-    # get whitelist
-    with open('whitelist.txt', 'r',encoding='utf-8') as file:
-        whitelist = file.read().splitlines()
+    # get blacklist
+    with open('blacklist.txt', 'r',encoding='utf-8') as file:
+        blacklist = file.read().splitlines()
 
 
     ####
@@ -93,9 +93,9 @@ def csm_data_preprocess(output_file):
 
     # collect data from api (output large json file with many duplicates)
     req = requests.get("https://market.csgo.com/api/v2/prices/class_instance/RUB.json")
-    with open(output_file, "w", encoding="utf-8") as file:
+    with open("temp/csm_rawdata.json", "w", encoding="utf-8") as file:
         file.write(str(req.content))
-    with open(output_file, "r", encoding="utf-8") as file:
+    with open("temp/csm_rawdata.json", "r", encoding="utf-8") as file:
         content = file.read().strip()
     
     # useless tags what needs to be removed
@@ -111,11 +111,11 @@ def csm_data_preprocess(output_file):
 
     # delete tags in json file
     content = pre_process_json(content, remove_tags)
-
     
     with open("temp/csm_part1.json", "r", encoding="utf-8") as file:
         data1 = json.loads(file.read())
 
+    
     try:
         objects = re.findall(r'\{[^{}]*\}', content)
         items = []
@@ -125,8 +125,8 @@ def csm_data_preprocess(output_file):
             try:
                 item_data = json.loads(obj)
                 if 'market_hash_name' in item_data and 'price' in item_data and 'avg_price' in item_data and 'buy_order' in item_data and item_data['avg_price'] != None:
-                    name = item_data['market_hash_name']
-                    if any(white_word in name for white_word in whitelist):
+                    name = item_data['market_hash_name'].replace("\\u2605", '★').replace("\\u2122", "™")
+                    if not any(black_word in name for black_word in blacklist):
                         items.append({"name": name, "price": data1.get(name).get('price'), "avg_price": item_data['avg_price'], "buy_order": item_data['buy_order'], "volume": data1.get(name).get('volume')})
                     else:
                         continue
@@ -267,9 +267,9 @@ def lsk_data_parse(input_file, output_file):
     
     result_dict = {}
 
-    # get whitelist
-    with open('whitelist.txt', 'r',encoding='utf-8') as file:
-        whitelist = file.read().splitlines()
+    # get blacklist
+    with open('blacklist.txt', 'r',encoding='utf-8') as file:
+        blacklist = file.read().splitlines()
 
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
         items = json.loads(file.read()).get('items')
@@ -278,7 +278,7 @@ def lsk_data_parse(input_file, output_file):
             try:
                 if isinstance(item, dict) and 'name' in item and 'price' in item:
                     name = str(item['name'])
-                    if any(white_word in name for white_word in whitelist):
+                    if not any(black_word in name for black_word in blacklist):
                         price = item['price']
                         
                         if name not in result_dict:
