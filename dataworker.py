@@ -65,8 +65,10 @@ def fix_json(content, output_file):
 # 
 def csm_data_preprocess(output_file):
     # get blacklist
-    with open('blacklist.txt', 'r',encoding='utf-8') as file:
-        blacklist = file.read().splitlines()
+    # with open('blacklist.txt', 'r',encoding='utf-8') as file:
+    #     blacklist = file.read().splitlines()
+    with open('whitelist.txt', 'r',encoding='utf-8') as file:
+        whitelist = file.read().splitlines()
 
 
     ####
@@ -126,7 +128,7 @@ def csm_data_preprocess(output_file):
                 item_data = json.loads(obj)
                 if 'market_hash_name' in item_data and 'price' in item_data and 'avg_price' in item_data and 'buy_order' in item_data and item_data['avg_price'] != None:
                     name = item_data['market_hash_name'].replace("\\u2605", '★').replace("\\u2122", "™")
-                    if not any(black_word in name for black_word in blacklist):
+                    if any(word in name for word in whitelist):
                         items.append({"name": name, "price": data1.get(name).get('price'), "avg_price": item_data['avg_price'], "buy_order": item_data['buy_order'], "volume": data1.get(name).get('volume')})
                     else:
                         continue
@@ -268,8 +270,10 @@ def lsk_data_parse(input_file, output_file):
     result_dict = {}
 
     # get blacklist
-    with open('blacklist.txt', 'r',encoding='utf-8') as file:
-        blacklist = file.read().splitlines()
+    # with open('blacklist.txt', 'r',encoding='utf-8') as file:
+    #     blacklist = file.read().splitlines()
+    with open('whitelist.txt', 'r',encoding='utf-8') as file:
+        whitelist = file.read().splitlines()
 
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
         items = json.loads(file.read()).get('items')
@@ -278,7 +282,7 @@ def lsk_data_parse(input_file, output_file):
             try:
                 if isinstance(item, dict) and 'name' in item and 'price' in item:
                     name = str(item['name'])
-                    if not any(black_word in name for black_word in blacklist):
+                    if any(word in name for word in whitelist):
                         price = item['price']
                         
                         if name not in result_dict:
