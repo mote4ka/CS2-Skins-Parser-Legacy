@@ -3,6 +3,7 @@ import re
 import requests
 
 import sys
+import os
 
 from config import *
 
@@ -61,91 +62,68 @@ def fix_json(content, output_file):
     except Exception as e:
         print(f"JSON file broken: {e}")
 
+def FileWrite(file, content):
+    with open(file, 'w',encoding='utf-8') as file:
+        file.write(content)
+
+def FileRead(file):
+    with open(file, 'r',encoding='utf-8') as file:
+        content = file.read().splitlines()
+    return content
+
+def JsonDump(file, content):
+    with open(file, 'w', encoding='utf-8') as file:
+        json.dump(content, file, ensure_ascii=False, indent=2)
+
+def JsonRead(file):
+    with open(file, 'r',encoding='utf-8') as file:
+        content = file.read()
+    return json.loads(content)
+
+def getwhitelist():
+    return FileRead('whitelist.txt')
+
+def GetCSMDb():
+    req = requests.get("https://market.csgo.com/api/v2/full-history/all.json")
+    items = req.json().get('history')
+    db = {}
+    for item in items:
+        if any(word in item for word in getwhitelist()):
+            db[item] = items.get(item)
+    JsonDump("temp/csm_items_db.json", db)
+    return db
+
+def GetItemData(id):
+    req = requests.get(f"https://market.csgo.com/api/v2/full-history/{id}.json", timeout=5)
+    data = req.json().get('data')
+    
+    return data
+
+def GetHistoryByName(name):
+    db = GetCSMDb()
+    req = requests.get(f"https://market.csgo.com/api/v2/full-history/{db.get(name)}.json")
+    return req.json().get('data').get('history')
 
 # 
 def csm_data_preprocess(output_file):
-    # get blacklist
-    # with open('blacklist.txt', 'r',encoding='utf-8') as file:
-    #     blacklist = file.read().splitlines()
-    with open('whitelist.txt', 'r',encoding='utf-8') as file:
-        whitelist = file.read().splitlines()
+    
+    ## get whitelist
+    whitelist = getwhitelist()
 
+    # Get Price and Volume
 
-    ####
-    #### Get Price and Volume
-    ####
     # request to csm api
     req = requests.get("https://market.csgo.com/api/v2/prices/RUB.json")
     items = req.json().get('items')
-
     # collect and save to dict ask price & volume
-    result_dict = {}
+    skins_list = {}
     for item in items:
         name = item.get('market_hash_name')
-        result_dict[name] = {'price' : item.get('price'),
-                                'volume': item.get('volume')}
+        skins_list[name] = {'price' : item.get('price'),
+                            'volume': item.get('volume')}
         
     # save dict to file
-    with open("temp/csm_part1.json", 'w', encoding='utf-8') as file:
-        json.dump(result_dict, file, ensure_ascii=False, indent=2)
-
-    ####
-    #### Get avg_price, buy_order
-    ####
-
-    # collect data from api (output large json file with many duplicates)
-    req = requests.get("https://market.csgo.com/api/v2/prices/class_instance/RUB.json")
-    with open("temp/csm_rawdata.json", "w", encoding="utf-8") as file:
-        file.write(str(req.content))
-    with open("temp/csm_rawdata.json", "r", encoding="utf-8") as file:
-        content = file.read().strip()
-    
-    # useless tags what needs to be removed
-    remove_tags = [
-        
-        'ru_name',
-        'ru_rarity',
-        'ru_quality',
-        'text_color',
-        'bg_color',
-        'phase'
-    ]
-
-    # delete tags in json file
-    content = pre_process_json(content, remove_tags)
-    
-    with open("temp/csm_part1.json", "r", encoding="utf-8") as file:
-        data1 = json.loads(file.read())
-
-    
-    try:
-        objects = re.findall(r'\{[^{}]*\}', content)
-        items = []
-        
-        # main loop / seek for objects and write values to dict
-        for obj in objects:
-            try:
-                item_data = json.loads(obj)
-                if 'market_hash_name' in item_data and 'price' in item_data and 'avg_price' in item_data and 'buy_order' in item_data and item_data['avg_price'] != None:
-                    name = item_data['market_hash_name'].replace("\\u2605", '★').replace("\\u2122", "™")
-                    if any(word in name for word in whitelist):
-                        items.append({"name": name, "price": data1.get(name).get('price'), "avg_price": item_data['avg_price'], "buy_order": item_data['buy_order'], "volume": data1.get(name).get('volume')})
-                    else:
-                        continue
-            except:
-                continue
-
-        # create new json and write items for furures needs
-        new_json = {"status": "success", "items": items}
-        
-        # write json to file
-        with open(output_file, 'w', encoding='utf-8') as file:
-            json.dump(new_json, file, ensure_ascii=False, indent=2)
-        return True
-        
-    except Exception as e:
-        print(f"JSON file broken: {e}")
-
+    JsonDump("temp/csm_data.json", skins_list)
 
 # process previous data and make final dict that will be used in parser.py
 def csm_data_process(input_file, output_file):
@@ -303,7 +281,7 @@ def lsk_data_parse(input_file, output_file):
 # args handler
 if '-csm' in sys.argv:
     csm_data_preprocess('temp/csm_cache.json')
-    csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
+    #csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
 if '-lskgetdata' in sys.argv:
     lsk_get_data('temp/lsk_rawdata.json')
 if '-lskprocessdata' in sys.argv:
@@ -315,7 +293,7 @@ if '-lsk' in sys.argv:
     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
 if '-full' in sys.argv:
     csm_data_preprocess('temp/csm_cache.json')
-    csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
+    #csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
     lsk_get_data('temp/lsk_rawdata.json')
     lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')

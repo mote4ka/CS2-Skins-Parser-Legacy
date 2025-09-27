@@ -1,5 +1,5 @@
 requests
-re
+regex
 json
 xlrd
 xlwt
