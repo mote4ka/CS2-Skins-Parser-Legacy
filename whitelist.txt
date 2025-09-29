@@ -3,5 +3,7 @@ AWP
 Desert Eagle
 USP
 Glock
-M4A1
+M4
+SSG
+AUG
 ★

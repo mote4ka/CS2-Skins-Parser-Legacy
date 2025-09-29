@@ -1,8 +1,12 @@
 import sys
 
-import xlrd
-import xlwt
-from xlutils.copy import copy
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.drawing.image import Image
+from openpyxl import load_workbook
+from openpyxl.formatting.rule import ColorScaleRule
+from openpyxl.utils import get_column_letter
+
 
 import os
 
@@ -12,91 +16,126 @@ from config import *
 
 if '-full' in sys.argv:
     from dataworker import *
-
-# check if output file already exist, if not create one
-if os.path.exists("output.xls"):
-    rb = xlrd.open_workbook('output.xls')
-    wb = copy(rb)
+elif '-csm' in sys.argv:
+    from dataworker import *
 else:
-    wb = xlwt.Workbook()
-    wb.add_sheet("List 1")
-    wb.save("output.xls")
+    from dataworker import GetCSMDb, GetItemData
+
+from rsi import *
+
+import traceback
+import time
+from time import sleep
+import io
 
 
-ws = wb.get_sheet(0)
+# excel preparations
+wb = Workbook()
+ws = wb.active
+ws.title = "Data"
 
 
-# styles
-xlwt.add_palette_colour("custom_link", 0x21) 
-wb.set_colour_RGB(0x21, 155, 194, 230) 
-style_bg_link = xlwt.easyxf('pattern: pattern solid, fore_colour custom_link; align: horiz center, vert center, wrap on; font: italic on')
-style_name= xlwt.easyxf('align: horiz center, vert centre')
-style_value = xlwt.easyxf('align: horiz center, vert centre; font: italic on')
-style_header = xlwt.easyxf('align: horiz center, vert centre; font: bold on, italic on')
+headers = ["Name", "Buy", "Sell", "Avg", "Profit", "%", "Avg %", "Volume", "Max", "Min", "RSI","RSI SM"]
+column_widths = [49] + [10]*9 +  [10]*2
 
+center_alignment = Alignment(horizontal='center', vertical='center')
+blue_fill = PatternFill(start_color="9BC2E6", end_color="9BC2E6", fill_type="solid")
+font_header = Font(name='Arial',bold=True, italic=True, size=10)
+font_name = Font(name='Arial', size=10)
+font_value = Font(name='Arial', italic=True, size=10)
 
-# columns names & size
-ws.write(0,0, "Name",style_header)
-ws.col(0).width = 256*50
-ws.write(0,1, "Buy Price",style_header)
-ws.col(1).width = 256*10
-ws.write(0,2, "Ask Price",style_header)
-ws.col(2).width = 256*10
-ws.write(0,3, "Avg Price",style_header)
-ws.col(3).width = 256*10
-ws.write(0,4, "Buy Order",style_header)
-ws.col(4).width = 256*10
-ws.write(0,5, "Profit",style_header)
-ws.col(5).width = 256*10
-ws.write(0,6, "%",style_header)
-ws.col(6).width = 256*10
-ws.write(0,7, "Avg Profit",style_header)
-ws.col(7).width = 256*10
-ws.write(0,8, "%",style_header)
-ws.col(8).width = 256*10
-ws.write(0,9, "Volume",style_header)
-ws.col(9).width = 256*8
+for col_num, header in enumerate(headers, 1):
+    cell = ws.cell(row=1, column=col_num, value=header)
+    cell.font = font_header
+    cell.alignment = center_alignment
+    ws.column_dimensions[get_column_letter(col_num)].width = column_widths[col_num-1]
+
+time_start = time.time()
 
 # get data from dataworker
 lsk_data = get_lsk_data()
 csm_data = get_csm_data()
-i=0
+i=2
+i_w =i
 
+db = GetCSMDb()
 
-for item in csm_data:
+for item in db:
+    try:
+        # check if item doesn match
+        if lsk_data.get(item)  is None:
+            raise ValueError('lsk price none')
+        lsk_price = float(lsk_data.get(item)*usdrub)
+        if not(lsk_price > low_filter and lsk_price < high_filter):
+            raise ValueError('filter skip')
+        csm_price = float(csm_data.get(item).get('price'))
+        profit = round(csm_price*0.95 - lsk_price*1.05,2)
 
-    if lsk_data.get(item) != None:
-        lsk_price = float(lsk_data.get(item))*usdrub
+        if profit <= 0:
+            raise ValueError('unprofitable')
 
+        o_item = str(item).replace('Battle-Scarred', 'BS').replace('Well-Worn', 'WW').replace('Field-Tested', 'FT').replace('Minimal Wear', 'MW').replace('Factory New', 'FN')
+        print(f"\r{i_w-1}/{len(db)} | {str(o_item).rjust(len(str(o_item))+(30-len(str(o_item))//2),' ').ljust(60,' ')} | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
+        item_data = GetItemData(db.get(item))
+
+        avg_price = float(item_data.get('average30d').get('RUB'))
+        # history data
+        history_data = item_data.get('history')
+        
+        profit_avg = round(avg_price*0.95 - lsk_price*1.05,2)
         # get values from data
-        ask_price = float(csm_data.get(item).get('price'))
-        avg_price = float(csm_data.get(item).get('avg_price'))
-        buy_order_price = float(csm_data.get(item).get('buy_order'))
-        csm_volume = float(csm_data.get(item).get('volume'))
+        final_data = {
+            'name': item,
+            'price_lis':lsk_price,
+            'price_csm':csm_price,
+            'price_avg30': avg_price,
+            'profit': profit,
+            'profit_percent': round(profit / (lsk_price*1.05) *100,2),
+            'avg_percent': round(profit_avg / (lsk_price*1.05)*100,2),
+            'volume30': float(item_data.get('sales30d').get('RUB')),
+            'price_max': float(item_data.get('max').get('RUB')),
+            'price_min': float(item_data.get('min').get('RUB')),
+            'rsi':get_rsi(history_data),
+            'rsi-sm':get_last_rsi_smoothed(history_data)
+        }
 
-        profit = float(ask_price)*0.95 - float(lsk_price)*1.05
-        avg_profit = float(avg_price)*0.95 - float(lsk_price)*1.0
-
+        print('0')
         # make hyperllink
         csm_hashname = item.replace('|', "%7C").replace("(", "%28").replace(")", "%29").replace(" ", "%20")
         lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27').replace("™", "")
 
         lsk_url = f"https://lis-skins.com/market/csgo/{lsk_hashname}"
         csm_url = f"https://market.csgo.com/en/{csm_hashname}"
+        print('0')
+        # writing values to cell
+        for index,value in enumerate(final_data,1):
+            cell = ws.cell(i, index, final_data.get(value))
+            cell.alignment = center_alignment
+            if index != 1:
+                cell.font = font_value
+            else:
+                cell.font = font_name
+            if index == 2:
+                cell.hyperlink = lsk_url
+                cell.fill = blue_fill
+            elif index == 3:
+                cell.hyperlink = csm_url
+                cell.fill = blue_fill
 
-        # write to file
-        ws.write(i+1,0, item, style_name)
-        ws.write(i+1,1, xlwt.Formula(f'HYPERLINK("{lsk_url}", {round(lsk_price,1)})'),style_bg_link)
-        ws.write(i+1,2, xlwt.Formula(f'HYPERLINK("{csm_url}", {round(ask_price,1)})'),style_bg_link)
-        ws.write(i+1,3, avg_price, style_value)
-        ws.write(i+1,4, buy_order_price, style_value)
-        ws.write(i+1,5, round(profit,1),style_value)
-        ws.write(i+1,6, round(profit/lsk_price*1.05*100,2),style_value)
-        ws.write(i+1,7, round(avg_profit,1),style_value)
-        ws.write(i+1,8, round(avg_profit/lsk_price*1.05*100,2),style_value)
-        ws.write(i+1,9, csm_volume,style_value)
+
+        # cell size
+        for row in range(1, i + 2):
+            ws.row_dimensions[row].height = 25
+        print('0')
+        wb.save('output.xlsx')
 
         i+=1
+        i_w +=1  
 
+    except Exception as e:
+        print(f"\r{i_w-1}/{len(db)} | ## {str(e)[:45].rjust(len(str(e))+(27-len(str(e))//2),' ').ljust(54,' ')} ## | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
+        i_w +=1
+        sleep(0.1)
+        continue
 
-wb.save('output.xls')
+wb.save('output.xlsx')
