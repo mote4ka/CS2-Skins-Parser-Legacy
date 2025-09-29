@@ -99,14 +99,14 @@ for item in db:
             'rsi-sm':get_last_rsi_smoothed(history_data)
         }
 
-        print('0')
+
         # make hyperllink
         csm_hashname = item.replace('|', "%7C").replace("(", "%28").replace(")", "%29").replace(" ", "%20")
         lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27').replace("™", "")
 
         lsk_url = f"https://lis-skins.com/market/csgo/{lsk_hashname}"
         csm_url = f"https://market.csgo.com/en/{csm_hashname}"
-        print('0')
+
         # writing values to cell
         for index,value in enumerate(final_data,1):
             cell = ws.cell(i, index, final_data.get(value))
@@ -126,7 +126,6 @@ for item in db:
         # cell size
         for row in range(1, i + 2):
             ws.row_dimensions[row].height = 25
-        print('0')
         wb.save('output.xlsx')
 
         i+=1
