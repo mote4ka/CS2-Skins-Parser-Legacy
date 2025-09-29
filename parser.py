@@ -2,11 +2,11 @@ import sys
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.drawing.image import Image
+from openpyxl import load_workbook
 from openpyxl.formatting.rule import ColorScaleRule
 from openpyxl.utils import get_column_letter
 
-import pandas as pd
-import matplotlib.pyplot as plt
 
 import os
 
@@ -21,10 +21,12 @@ elif '-csm' in sys.argv:
 else:
     from dataworker import GetCSMDb, GetItemData
 
+from rsi import *
 
 import traceback
 import time
 from time import sleep
+import io
 
 
 # excel preparations
@@ -32,8 +34,9 @@ wb = Workbook()
 ws = wb.active
 ws.title = "Data"
 
-headers = ["Name", "Buy", "Sell", "Avg", "Profit", "%", "Avg %", "Volume", "Max", "Min", "Chart"]
-column_widths = [49] + [10]*9 +  [90]
+
+headers = ["Name", "Buy", "Sell", "Avg", "Profit", "%", "Avg %", "Volume", "Max", "Min", "RSI","RSI SM"]
+column_widths = [49] + [10]*9 +  [10]*2
 
 center_alignment = Alignment(horizontal='center', vertical='center')
 blue_fill = PatternFill(start_color="9BC2E6", end_color="9BC2E6", fill_type="solid")
@@ -59,20 +62,25 @@ db = GetCSMDb()
 
 for item in db:
     try:
+        # check if item doesn match
+        if lsk_data.get(item)  is None:
+            raise ValueError('lsk price none')
         lsk_price = float(lsk_data.get(item)*usdrub)
+        if not(lsk_price > low_filter and lsk_price < high_filter):
+            raise ValueError('filter skip')
         csm_price = float(csm_data.get(item).get('price'))
         profit = round(csm_price*0.95 - lsk_price*1.05,2)
 
         if profit <= 0:
-            raise ValueError('shit')
+            raise ValueError('unprofitable')
 
         o_item = str(item).replace('Battle-Scarred', 'BS').replace('Well-Worn', 'WW').replace('Field-Tested', 'FT').replace('Minimal Wear', 'MW').replace('Factory New', 'FN')
-        print(f"\r{i-1}/{len(db)} | {str(o_item).rjust(len(str(o_item))+(30-len(str(o_item))//2),' ').ljust(60,' ')} | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
+        print(f"\r{i_w-1}/{len(db)} | {str(o_item).rjust(len(str(o_item))+(30-len(str(o_item))//2),' ').ljust(60,' ')} | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
         item_data = GetItemData(db.get(item))
 
-        
         avg_price = float(item_data.get('average30d').get('RUB'))
-
+        # history data
+        history_data = item_data.get('history')
         
         profit_avg = round(avg_price*0.95 - lsk_price*1.05,2)
         # get values from data
@@ -87,17 +95,19 @@ for item in db:
             'volume30': float(item_data.get('sales30d').get('RUB')),
             'price_max': float(item_data.get('max').get('RUB')),
             'price_min': float(item_data.get('min').get('RUB')),
-            
+            'rsi':get_rsi(history_data),
+            'rsi-sm':get_last_rsi_smoothed(history_data)
         }
-        history = item_data.get('history')
 
+        print('0')
         # make hyperllink
         csm_hashname = item.replace('|', "%7C").replace("(", "%28").replace(")", "%29").replace(" ", "%20")
         lsk_hashname = item.lower().replace(' | ', "-").replace(" (", "-").replace(")", "").replace(" ", "-").replace("'", '%27').replace("™", "")
 
         lsk_url = f"https://lis-skins.com/market/csgo/{lsk_hashname}"
         csm_url = f"https://market.csgo.com/en/{csm_hashname}"
-
+        print('0')
+        # writing values to cell
         for index,value in enumerate(final_data,1):
             cell = ws.cell(i, index, final_data.get(value))
             cell.alignment = center_alignment
@@ -113,12 +123,17 @@ for item in db:
                 cell.fill = blue_fill
 
 
+        # cell size
+        for row in range(1, i + 2):
+            ws.row_dimensions[row].height = 25
+        print('0')
         wb.save('output.xlsx')
+
         i+=1
-        i_w +=1
+        i_w +=1  
 
     except Exception as e:
-        print(f"\r{i_w-1}/{len(db)} | ## {str(e).rjust(len(str(e))+(27-len(str(e))//2),' ').ljust(54,' ')} ## | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
+        print(f"\r{i_w-1}/{len(db)} | ## {str(e)[:45].rjust(len(str(e))+(27-len(str(e))//2),' ').ljust(54,' ')} ## | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
         i_w +=1
         sleep(0.1)
         continue

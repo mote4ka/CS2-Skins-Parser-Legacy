@@ -1,6 +1,5 @@
 requests
 regex
 json
-xlrd
-xlwt
-xlutils
+openpyxl
+numpy

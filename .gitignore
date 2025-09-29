@@ -3,4 +3,4 @@
 *.pyc
 *.json
 
-config.py
+apikey.py
