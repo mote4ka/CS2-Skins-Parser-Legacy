@@ -28,6 +28,7 @@ import time
 from time import sleep
 import io
 
+from datetime import date
 
 # excel preparations
 wb = Workbook()
@@ -35,8 +36,8 @@ ws = wb.active
 ws.title = "Data"
 
 
-headers = ["Name", "Buy", "Sell", "Avg", "Profit", "%", "Avg %", "Volume", "Max", "Min", "RSI","RSI SM"]
-column_widths = [49] + [10]*9 +  [10]*2
+headers = ["Name", "Buy", "Sell", "Avg", "Deviation", "%", "Avg %", "RSI SM", "Volume", "Profit", "Max", "Min"]
+column_widths = [49] + [10]*12
 
 center_alignment = Alignment(horizontal='center', vertical='center')
 blue_fill = PatternFill(start_color="9BC2E6", end_color="9BC2E6", fill_type="solid")
@@ -60,18 +61,23 @@ i_w =i
 
 db = GetCSMDb()
 
+skip_file = open('skipped.txt', 'w',encoding='utf-8')
+
 for item in db:
     try:
         # check if item doesn match
         if lsk_data.get(item)  is None:
+            skip_file.write(f'{i_w} | {item} lsk miss\n')
             raise ValueError('lsk price none')
         lsk_price = float(lsk_data.get(item)*usdrub)
         if not(lsk_price > low_filter and lsk_price < high_filter):
+            skip_file.write(f'{i_w} | {item} filter\n')
             raise ValueError('filter skip')
         csm_price = float(csm_data.get(item).get('price'))
-        profit = round(csm_price*0.95 - lsk_price*1.05,2)
+        profit = round(csm_price*0.95 - lsk_price*1.02,2)
 
         if profit <= 0:
+            skip_file.write(f'{i_w} | {item} unprofitable ({lsk_price} ! {csm_price}\n')
             raise ValueError('unprofitable')
 
         o_item = str(item).replace('Battle-Scarred', 'BS').replace('Well-Worn', 'WW').replace('Field-Tested', 'FT').replace('Minimal Wear', 'MW').replace('Factory New', 'FN')
@@ -79,6 +85,7 @@ for item in db:
         item_data = GetItemData(db.get(item))
 
         avg_price = float(item_data.get('average30d').get('RUB'))
+        price_deviation = round(csm_price / avg_price * 100 - 100,2)
         # history data
         history_data = item_data.get('history')
         
@@ -89,14 +96,16 @@ for item in db:
             'price_lis':lsk_price,
             'price_csm':csm_price,
             'price_avg30': avg_price,
-            'profit': profit,
+            'price_deviation': price_deviation,
             'profit_percent': round(profit / (lsk_price*1.05) *100,2),
             'avg_percent': round(profit_avg / (lsk_price*1.05)*100,2),
+            'rsi-sm':get_last_rsi_smoothed(history_data),
             'volume30': float(item_data.get('sales30d').get('RUB')),
+            'profit': profit,
             'price_max': float(item_data.get('max').get('RUB')),
             'price_min': float(item_data.get('min').get('RUB')),
-            'rsi':get_rsi(history_data),
-            'rsi-sm':get_last_rsi_smoothed(history_data)
+            #'rsi':get_rsi(history_data),
+            
         }
 
 
@@ -126,15 +135,15 @@ for item in db:
         # cell size
         for row in range(1, i + 2):
             ws.row_dimensions[row].height = 25
-        wb.save('output.xlsx')
+        wb.save(f'output {str(date.today())}.xlsx')
 
         i+=1
         i_w +=1  
 
     except Exception as e:
+        #skip_file.write(f'{i_w} | {item} uknwn\n')
         print(f"\r{i_w-1}/{len(db)} | ## {str(e)[:45].rjust(len(str(e))+(27-len(str(e))//2),' ').ljust(54,' ')} ## | {round(time.time()-time_start)//60}m {round(time.time()-time_start)%60}s ")
         i_w +=1
-        sleep(0.1)
         continue
 
-wb.save('output.xlsx')
+wb.save(f'output {str(date.today())}.xlsx')

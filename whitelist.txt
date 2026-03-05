@@ -6,4 +6,8 @@ Glock
 M4
 SSG
 AUG
+P90
+MAC-10
+MP9
+Agent
 ★

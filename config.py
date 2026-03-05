@@ -1,3 +1,3 @@
-usdrub = 84.9
-low_filter = 99
-high_filter = 40000
+usdrub = 80.44
+low_filter = 800
+high_filter = 60000
