@@ -11,6 +11,9 @@ from selenium import webdriver
 
 from time import sleep
 
+import asyncio
+import aiohttp
+
 # json stuuf made by deepseek
 def pre_process_json(content, remove_tags):
 
@@ -97,11 +100,11 @@ def GetCSMDb():
     JsonDump("temp/csm_items_db.json", db)
     return db
 
-def GetItemData(id):
-    req = requests.get(f"https://market.csgo.com/api/v2/full-history/{id}.json", timeout=5)
-    data = req.json().get('data')
-    
-    return data
+async def GetItemData(id):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"https://market.csgo.com/api/v2/full-history/{id}.json", timeout=5) as resp:
+            data = await resp.json()
+    return data['data']
 
 def GetHistoryByName(name):
     db = GetCSMDb()
