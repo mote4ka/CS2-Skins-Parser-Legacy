@@ -1,0 +1,274 @@
+2 | M4A4 | Buzz Kill (Battle-Scarred) unprofitable (29763.839999999997 ! 30899.85
+3 | StatTrak™ USP-S | Black Lotus (Battle-Scarred) filter
+4 | StatTrak™ AUG | Aristocrat (Minimal Wear) unprofitable (835.4903999999999 ! 382.12
+5 | ★ Bayonet | Damascus Steel (Factory New) unprofitable (17935.9488 ! 18728.12
+6 | AK-47 | Point Disarray (Factory New) unprofitable (8190.717599999999 ! 8006.24
+8 | P90 | Sand Spray (Field-Tested) filter
+9 | ★ Hydra Gloves | Mangrove (Field-Tested) unprofitable (5317.051199999999 ! 3650.0
+11 | Glock-18 | Gamma Doppler (Minimal Wear) lsk miss
+12 | AWP | Wildfire (Battle-Scarred) unprofitable (5449.694399999999 ! 4615.0
+13 | AUG | Storm (Field-Tested) filter
+14 | ★ Shadow Daggers | Slaughter (Minimal Wear) unprofitable (10044.4872 ! 9560.0
+15 | Desert Eagle | Mudder (Field-Tested) filter
+16 | SSG 08 | Dragonfire (Battle-Scarred) unprofitable (38454.39599999999 ! 31999.97
+17 | MP9 | Starlight Protector (Battle-Scarred) unprofitable (5976.223199999999 ! 6300.0
+18 | AUG | Tom Cat (Factory New) filter
+19 | AK-47 | Point Disarray (Field-Tested) unprofitable (1646.7168 ! 1500.0
+20 | Souvenir P90 | Verdant Growth (Minimal Wear) lsk miss
+21 | M4A4 | In Living Color (Field-Tested) unprofitable (3984.1487999999995 ! 3097.99
+22 | AK-47 | Asiimov (Field-Tested) unprofitable (4832.58 ! 3696.43
+23 | SSG 08 | Abyss (Well-Worn) filter
+24 | AWP | Pit Viper (Minimal Wear) filter
+25 | MAC-10 | Candy Apple (Factory New) filter
+26 | AWP | Pit Viper (Field-Tested) filter
+27 | Souvenir MAC-10 | Sienna Damask (Minimal Wear) lsk miss
+28 | Souvenir AUG | Colony (Field-Tested) filter
+29 | Souvenir MP9 | Storm (Field-Tested) filter
+30 | Glock-18 | Night (Minimal Wear) unprofitable (2934.3264 ! 2974.02
+31 | USP-S | Ticket to Hell (Field-Tested) filter
+32 | Glock-18 | Bunsen Burner (Minimal Wear) filter
+33 | Glock-18 | Water Elemental (Field-Tested) unprofitable (2542.8672 ! 1758.26
+34 | Desert Eagle | Kumicho Dragon (Field-Tested) unprofitable (3294.2423999999996 ! 2130.99
+35 | StatTrak™ MAC-10 | Classic Crate (Field-Tested) filter
+36 | SSG 08 | Turbo Peek (Field-Tested) unprofitable (3614.5271999999995 ! 2159.92
+37 | AWP | Mortis (Field-Tested) filter
+38 | Desert Eagle | Mecha Industries (Field-Tested) filter
+39 | AK-47 | Leet Museo (Field-Tested) unprofitable (43972.83839999999 ! 29999.99
+40 | SSG 08 | Mainframe 001 (Minimal Wear) filter
+41 | Desert Eagle | Bronze Deco (Field-Tested) filter
+42 | Sticker | Hello MP9 filter
+43 | MAC-10 | Oceanic (Minimal Wear) filter
+44 | AWP | Capillary (Field-Tested) filter
+45 | USP-S | Forest Leaves (Minimal Wear) filter
+46 | Desert Eagle | Oxide Blaze (Field-Tested) filter
+47 | AWP | Safari Mesh (Field-Tested) filter
+48 | AK-47 | Safari Mesh (Field-Tested) filter
+49 | StatTrak™ MP9 | Black Sand (Field-Tested) filter
+50 | Glock-18 | High Beam (Factory New) filter
+51 | MAC-10 | Carnivore (Field-Tested) filter
+52 | M4A4 | Mainframe (Minimal Wear) filter
+53 | Glock-18 | Sacrifice (Battle-Scarred) filter
+54 | Glock-18 | Off World (Field-Tested) filter
+55 | Desert Eagle | Sputnik (Field-Tested) filter
+56 | Glock-18 | Oxide Blaze (Minimal Wear) filter
+57 | Desert Eagle | Sputnik (Well-Worn) filter
+58 | MAC-10 | Candy Apple (Minimal Wear) filter
+59 | SSG 08 | Blue Spruce (Minimal Wear) lsk miss
+60 | P90 | Elite Build (Well-Worn) filter
+61 | MP9 | Bioleak (Field-Tested) filter
+62 | M4A4 | Desolate Space (Well-Worn) unprofitable (1230.9936 ! 1129.33
+63 | USP-S | Torque (Minimal Wear) filter
+64 | USP-S | Black Lotus (Well-Worn) filter
+65 | MP9 | Sand Dashed (Battle-Scarred) lsk miss
+66 | Glock-18 | Moonrise (Field-Tested) filter
+67 | Desert Eagle | Directive (Battle-Scarred) filter
+68 | Souvenir SSG 08 | Jungle Dashed (Field-Tested) lsk miss
+69 | AWP | Exoskeleton (Well-Worn) filter
+70 | SSG 08 | Fever Dream (Field-Tested) filter
+71 | M4A4 | Desolate Space (Minimal Wear) unprofitable (2979.6192 ! 2159.25
+72 | AK-47 | Elite Build (Battle-Scarred) unprofitable (835.4903999999999 ! 145.0
+73 | M4A4 | Magnesium (Minimal Wear) filter
+74 | Souvenir SSG 08 | Prey (Field-Tested) lsk miss
+75 | P90 | Sand Spray (Well-Worn) lsk miss
+76 | AWP | Snake Camo (Field-Tested) unprofitable (8933.196 ! 8787.2
+77 | Souvenir P90 | Desert DDPAT (Minimal Wear) lsk miss
+78 | AUG | Contractor (Field-Tested) filter
+79 | Glock-18 | Oxide Blaze (Field-Tested) filter
+80 | Souvenir P90 | Desert DDPAT (Field-Tested) lsk miss
+81 | SSG 08 | Mainframe 001 (Field-Tested) filter
+82 | StatTrak™ AUG | Amber Slipstream (Field-Tested) filter
+83 | ★ Driver Gloves | Racing Green (Battle-Scarred) unprofitable (6055.4856 ! 3725.5
+84 | Souvenir AUG | Sweeper (Field-Tested) lsk miss
+85 | M4A4 | Magnesium (Battle-Scarred) filter
+87 | StatTrak™ Glock-18 | Ironwork (Field-Tested) filter
+88 | Souvenir MAC-10 | Urban DDPAT (Field-Tested) filter
+89 | Souvenir MP9 | Slide (Minimal Wear) lsk miss
+90 | MAC-10 | Silver (Factory New) filter
+91 | M4A4 | Mainframe (Battle-Scarred) lsk miss
+92 | MP9 | Orange Peel (Field-Tested) filter
+93 | Desert Eagle | Light Rail (Battle-Scarred) filter
+94 | StatTrak™ SSG 08 | Ghost Crusader (Battle-Scarred) unprofitable (835.4903999999999 ! 291.95
+95 | SSG 08 | Blue Spruce (Field-Tested) lsk miss
+96 | P90 | Sand Spray (Battle-Scarred) lsk miss
+97 | StatTrak™ AUG | Ricochet (Battle-Scarred) filter
+98 | Desert Eagle | Oxide Blaze (Well-Worn) filter
+99 | StatTrak™ AK-47 | Blue Laminate (Factory New) unprofitable (5109.9983999999995 ! 4300.8
+100 | StatTrak™ M4A4 | Evil Daimyo (Well-Worn) unprofitable (823.3584 ! 740.0
+101 | StatTrak™ AUG | Plague (Minimal Wear) filter
+102 | P90 | Sand Spray (Minimal Wear) lsk miss
+103 | AK-47 | Uncharted (Factory New) filter
+105 | SSG 08 | Blue Spruce (Well-Worn) lsk miss
+106 | SSG 08 | Blue Spruce (Battle-Scarred) lsk miss
+107 | AUG | Contractor (Minimal Wear) filter
+109 | Sticker | Hello P90 filter
+110 | AUG | Contractor (Well-Worn) lsk miss
+111 | StatTrak™ P90 | Cocoa Rampage (Minimal Wear) filter
+112 | M4A1-S | Nitro (Minimal Wear) filter
+113 | M4A4 | Tornado (Minimal Wear) unprofitable (3921.0623999999993 ! 3000.0
+114 | Desert Eagle | Naga (Well-Worn) filter
+115 | MP9 | Modest Threat (Battle-Scarred) filter
+116 | M4A4 | Royal Paladin (Factory New) unprofitable (41817.386399999996 ! 43032.86
+117 | Glock-18 | Water Elemental (Minimal Wear) unprofitable (1937.0759999999998 ! 1758.78
+118 | P90 | Grim (Field-Tested) filter
+119 | USP-S | Lead Conduit (Well-Worn) filter
+120 | StatTrak™ AUG | Amber Slipstream (Factory New) filter
+121 | MP9 | Music Box (Factory New) unprofitable (3442.2528 ! 3425.94
+122 | StatTrak™ MP9 | Mount Fuji (Field-Tested) unprofitable (1160.628 ! 1055.09
+123 | AK-47 | Frontside Misty (Field-Tested) unprofitable (2127.9527999999996 ! 2228.8
+124 | Glock-18 | Catacombs (Field-Tested) filter
+125 | AWP | Atheris (Field-Tested) filter
+126 | StatTrak™ USP-S | Flashback (Field-Tested) filter
+127 | Desert Eagle | Mecha Industries (Factory New) unprofitable (2240.3759999999997 ! 1419.0
+128 | StatTrak™ P90 | Traction (Well-Worn) filter
+129 | AWP | Exoskeleton (Battle-Scarred) filter
+130 | USP-S | Torque (Field-Tested) filter
+131 | AUG | Triqua (Field-Tested) filter
+132 | StatTrak™ Glock-18 | Moonrise (Well-Worn) unprofitable (835.4903999999999 ! 273.4
+133 | USP-S | Flashback (Battle-Scarred) filter
+134 | Glock-18 | Ironwork (Field-Tested) filter
+135 | SSG 08 | Mainframe 001 (Well-Worn) filter
+136 | StatTrak™ Desert Eagle | Bronze Deco (Field-Tested) filter
+137 | StatTrak™ MP9 | Black Sand (Well-Worn) filter
+138 | MAC-10 | Rangeen (Well-Worn) filter
+139 | AWP | Safari Mesh (Well-Worn) filter
+140 | P90 | Traction (Well-Worn) filter
+141 | M4A4 | Griffin (Field-Tested) filter
+142 | AWP | Safari Mesh (Minimal Wear) filter
+143 | Desert Eagle | Bronze Deco (Factory New) filter
+144 | AK-47 | Orbit Mk01 (Factory New) unprofitable (10173.8952 ! 9000.0
+145 | StatTrak™ AWP | PAW (Field-Tested) unprofitable (833.8728 ! 536.65
+146 | Desert Eagle | Corinthian (Minimal Wear) filter
+147 | MP9 | Black Sand (Well-Worn) filter
+148 | MAC-10 | Pipe Down (Factory New) unprofitable (835.4903999999999 ! 586.69
+149 | StatTrak™ SSG 08 | Turbo Peek (Field-Tested) unprofitable (3499.6776 ! 3286.2
+150 | AWP | Worm God (Well-Worn) filter
+151 | Glock-18 | Off World (Minimal Wear) filter
+152 | Desert Eagle | Bronze Deco (Minimal Wear) filter
+153 | Souvenir P90 | Ancient Earth (Field-Tested) lsk miss
+154 | SSG 08 | Ghost Crusader (Battle-Scarred) filter
+155 | AWP | Capillary (Well-Worn) filter
+156 | Glock-18 | Sacrifice (Field-Tested) filter
+157 | ★ Hydra Gloves | Rattler (Field-Tested) unprofitable (4832.58 ! 3690.07
+158 | M4A4 | Dark Blossom (Minimal Wear) unprofitable (2405.3711999999996 ! 2416.11
+159 | Desert Eagle | Ocean Drive (Well-Worn) unprofitable (6704.952 ! 6800.0
+160 | Glock-18 | Nuclear Garden (Field-Tested) filter
+161 | USP-S | Monster Mashup (Field-Tested) unprofitable (3028.1471999999994 ! 2398.28
+162 | ★ Flip Knife | Forest DDPAT (Battle-Scarred) unprofitable (9852.801599999999 ! 9900.0
+163 | AK-47 | Neon Revolution (Field-Tested) unprofitable (14521.195199999998 ! 9450.0
+164 | M4A4 | 龍王 (Dragon King) (Field-Tested) lsk miss
+165 | StatTrak™ Glock-18 | Vogue (Field-Tested) unprofitable (908.2823999999999 ! 651.27
+166 | M4A4 | Mainframe (Factory New) filter
+167 | Glock-18 | Vogue (Battle-Scarred) filter
+168 | MAC-10 | Disco Tech (Well-Worn) filter
+169 | M4A4 | In Living Color (Battle-Scarred) unprofitable (3028.1471999999994 ! 2950.0
+170 | AK-47 | Redline (Field-Tested) unprofitable (3974.4431999999997 ! 2989.99
+171 | Souvenir USP-S | Purple DDPAT (Field-Tested) filter
+172 | Desert Eagle | Trigger Discipline (Field-Tested) filter
+173 | Desert Eagle | Blue Ply (Field-Tested) filter
+174 | MP9 | Mount Fuji (Field-Tested) unprofitable (941.4432 ! 607.82
+175 | AWP | Wildfire (Field-Tested) unprofitable (4832.58 ! 4659.77
+176 | StatTrak™ MP9 | Bioleak (Factory New) filter
+177 | SSG 08 | Fever Dream (Factory New) filter
+178 | SSG 08 | Abyss (Field-Tested) filter
+179 | AK-47 | Elite Build (Minimal Wear) filter
+180 | MAC-10 | Ensnared (Well-Worn) filter
+181 | StatTrak™ Desert Eagle | Mecha Industries (Field-Tested) unprofitable (1452.6048 ! 1479.75
+182 | USP-S | Flashback (Field-Tested) filter
+183 | MP9 | Ruby Poison Dart (Minimal Wear) filter
+184 | Glock-18 | Snack Attack (Field-Tested) unprofitable (3633.1295999999998 ! 2249.98
+185 | AK-47 | Uncharted (Field-Tested) filter
+186 | M4A1-S | Boreal Forest (Field-Tested) filter
+187 | AWP | Phobos (Field-Tested) filter
+188 | MAC-10 | Sienna Damask (Minimal Wear) filter
+189 | AWP | Atheris (Battle-Scarred) unprofitable (833.8728 ! 386.61
+190 | M4A1-S | Hyper Beast (Well-Worn) unprofitable (10623.588 ! 10300.0
+191 | USP-S | Cortex (Field-Tested) filter
+192 | StatTrak™ Desert Eagle | Blue Ply (Minimal Wear) unprofitable (807.1824 ! 170.28
+193 | SSG 08 | Prey (Minimal Wear) filter
+194 | M4A4 | Urban DDPAT (Battle-Scarred) filter
+195 | StatTrak™ Desert Eagle | Light Rail (Field-Tested) filter
+196 | AK-47 | Safari Mesh (Minimal Wear) filter
+197 | StatTrak™ AWP | Exoskeleton (Well-Worn) filter
+198 | Glock-18 | Oxide Blaze (Well-Worn) filter
+199 | StatTrak™ SSG 08 | Mainframe 001 (Field-Tested) filter
+200 | M4A1-S | Leaded Glass (Well-Worn) unprofitable (1089.4536 ! 907.35
+201 | M4A4 | Tornado (Battle-Scarred) unprofitable (810.4175999999999 ! 793.77
+202 | MP9 | Food Chain (Field-Tested) filter
+204 | MP9 | Goo (Minimal Wear) filter
+206 | SSG 08 | Acid Fade (Factory New) filter
+207 | MP9 | Modest Threat (Field-Tested) filter
+208 | AK-47 | Neon Rider (Field-Tested) unprofitable (7203.172799999999 ! 4451.04
+209 | AK-47 | Slate (Battle-Scarred) filter
+210 | Glock-18 | Bullet Queen (Battle-Scarred) unprofitable (6042.544799999999 ! 4900.0
+211 | AK-47 | Slate (Field-Tested) filter
+212 | Desert Eagle | Conspiracy (Minimal Wear) unprofitable (2420.7383999999997 ! 1764.25
+213 | M4A1-S | Decimator (Field-Tested) unprofitable (1670.9807999999998 ! 1531.73
+214 | MAC-10 | Carnivore (Well-Worn) filter
+215 | M4A4 | The Battlestar (Minimal Wear) unprofitable (8137.336799999999 ! 5499.99
+216 | Glock-18 | Off World (Well-Worn) filter
+217 | P90 | Freight (Field-Tested) filter
+218 | M4A1-S | Nitro (Field-Tested) filter
+219 | P90 | Desert DDPAT (Field-Tested) filter
+220 | MAC-10 | Disco Tech (Battle-Scarred) unprofitable (835.4903999999999 ! 487.0
+221 | SSG 08 | Abyss (Minimal Wear) filter
+222 | SSG 08 | Parallax (Well-Worn) filter
+223 | Desert Eagle | Trigger Discipline (Minimal Wear) filter
+224 | M4A4 | Neo-Noir (Battle-Scarred) unprofitable (3631.5119999999997 ! 2989.85
+225 | Desert Eagle | Sputnik (Factory New) unprofitable (847.6224 ! 531.86
+226 | Glock-18 | Royal Legion (Well-Worn) filter
+227 | M4A1-S | Fizzy POP (Minimal Wear) filter
+228 | Glock-18 | Weasel (Field-Tested) filter
+229 | StatTrak™ Glock-18 | Sacrifice (Well-Worn) filter
+230 | AK-47 | Safari Mesh (Battle-Scarred) filter
+231 | M4A4 | Urban DDPAT (Field-Tested) filter
+232 | AUG | Surveillance (Minimal Wear) filter
+233 | M4A1-S | Basilisk (Field-Tested) filter
+234 | StatTrak™ SSG 08 | Necropos (Field-Tested) filter
+236 | AUG | Ricochet (Battle-Scarred) filter
+237 | Desert Eagle | Crimson Web (Field-Tested) unprofitable (1810.9032 ! 1123.03
+239 | USP-S | Black Lotus (Battle-Scarred) filter
+240 | M4A4 | Spider Lily (Field-Tested) unprofitable (854.9016 ! 751.86
+241 | Souvenir SSG 08 | Jungle Dashed (Battle-Scarred) lsk miss
+242 | AWP | Hyper Beast (Well-Worn) unprofitable (4032.6767999999997 ! 3397.48
+243 | MP9 | Deadly Poison (Field-Tested) filter
+244 | StatTrak™ Glock-18 | Warhawk (Well-Worn) filter
+245 | USP-S | Neo-Noir (Battle-Scarred) unprofitable (8066.1624 ! 7941.6
+246 | USP-S | Black Lotus (Field-Tested) filter
+247 | MP9 | Sand Dashed (Field-Tested) filter
+248 | Glock-18 | Off World (Battle-Scarred) filter
+249 | Desert Eagle | Trigger Discipline (Well-Worn) filter
+252 | USP-S | Check Engine (Field-Tested) filter
+253 | MAC-10 | Propaganda (Well-Worn) unprofitable (8067.78 ! 5479.99
+254 | AK-47 | Rat Rod (Well-Worn) filter
+255 | AUG | Chameleon (Well-Worn) unprofitable (6273.0527999999995 ! 6544.32
+256 | AUG | Arctic Wolf (Battle-Scarred) filter
+257 | M4A4 | Neo-Noir (Well-Worn) unprofitable (4699.128 ! 3200.0
+258 | AWP | Acheron (Field-Tested) filter
+259 | AWP | Phobos (Minimal Wear) filter
+261 | MP9 | Ruby Poison Dart (Field-Tested) unprofitable (835.4903999999999 ! 140.66
+263 | USP-S | Purple DDPAT (Factory New) unprofitable (5739.2447999999995 ! 4960.19
+264 | AK-47 | Rat Rod (Battle-Scarred) filter
+265 | StatTrak™ USP-S | Cyrex (Field-Tested) unprofitable (835.4903999999999 ! 675.73
+266 | AWP | Sun in Leo (Minimal Wear) unprofitable (4178.260799999999 ! 2697.06
+267 | USP-S | Cyrex (Minimal Wear) filter
+268 | USP-S | Check Engine (Minimal Wear) filter
+269 | USP-S | Night Ops (Factory New) filter
+270 | StatTrak™ USP-S | Black Lotus (Field-Tested) filter
+271 | MAC-10 | Toybox (Field-Tested) unprofitable (3040.2792 ! 2339.16
+272 | StatTrak™ Desert Eagle | Directive (Battle-Scarred) unprofitable (835.4903999999999 ! 212.09
+273 | AWP | POP AWP (Field-Tested) unprofitable (1332.0936 ! 1239.46
+274 | AK-47 | Elite Build (Field-Tested) filter
+275 | USP-S | Whiteout (Field-Tested) unprofitable (11203.4976 ! 11503.56
+277 | StatTrak™ USP-S | Cortex (Well-Worn) unprofitable (1198.6416 ! 858.27
+278 | AK-47 | Slate (Well-Worn) filter
+279 | AWP | PAW (Field-Tested) filter
+280 | M4A1-S | Leaded Glass (Field-Tested) unprofitable (1029.6024 ! 899.98
+281 | StatTrak™ Desert Eagle | Oxide Blaze (Minimal Wear) unprofitable (835.4903999999999 ! 148.35
+282 | StatTrak™ Glock-18 | Clear Polymer (Field-Tested) filter
+283 | M4A1-S | Night Terror (Field-Tested) filter
+284 | MAC-10 | Disco Tech (Field-Tested) filter
+285 | StatTrak™ P90 | Grim (Minimal Wear) filter
+286 | StatTrak™ AK-47 | Elite Build (Field-Tested) filter
+287 | Glock-18 | Grinder (Factory New) unprofitable (1210.7736 ! 857.55
+288 | SSG 08 | Dragonfire (Field-Tested) unprofitable (55713.3792 ! 32089.88
+289 | M4A4 | Griffin (Minimal Wear) filter
