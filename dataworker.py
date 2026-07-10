@@ -7,6 +7,13 @@ import os
 
 from config import *
 
+from selenium import webdriver
+
+from time import sleep
+
+import asyncio
+import aiohttp
+
 # json stuuf made by deepseek
 def pre_process_json(content, remove_tags):
 
@@ -93,11 +100,11 @@ def GetCSMDb():
     JsonDump("temp/csm_items_db.json", db)
     return db
 
-def GetItemData(id):
-    req = requests.get(f"https://market.csgo.com/api/v2/full-history/{id}.json", timeout=5)
-    data = req.json().get('data')
-    
-    return data
+async def GetItemData(id):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"https://market.csgo.com/api/v2/full-history/{id}.json", timeout=5) as resp:
+            data = await resp.json()
+    return data['data']
 
 def GetHistoryByName(name):
     db = GetCSMDb()
@@ -151,6 +158,12 @@ def csm_data_process(input_file, output_file):
             json.dump(result_dict, file, ensure_ascii=False, indent=2)
 
     print(f"CSM saved {len(result_dict)} items")
+
+
+##
+##  Lis Skins
+##
+
 # just collecting raw data from lis skins api
 def lsk_get_data(output_file):
     with open(output_file, "w", encoding="utf-8") as file:
@@ -278,19 +291,24 @@ def lsk_data_parse(input_file, output_file):
     # print items amount
     print(f"Lsk saved {len(result_dict)} items")
 
+
+
 # args handler
-if '-csm' in sys.argv:
-    csm_data_preprocess('temp/csm_cache.json')
-    #csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
-if '-lskgetdata' in sys.argv:
-    lsk_get_data('temp/lsk_rawdata.json')
-if '-lskprocessdata' in sys.argv:
-    lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
-if '-lskparse' in sys.argv:
-    lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
-if '-lsk' in sys.argv:
-    lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
-    lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
+# if '-csm' in sys.argv:
+#     csm_data_preprocess('temp/csm_cache.json')
+#     #csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
+# if '-lskgetdata' in sys.argv:
+#     lsk_get_data('temp/lsk_rawdata.json')
+# if '-lskprocessdata' in sys.argv:
+#     lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
+# if '-lskparse' in sys.argv:
+#     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
+# if '-lsk' in sys.argv:
+#     lsk_process_data('temp/lsk_rawdata.json','temp/lsk_processed.json')
+#     lsk_data_parse('temp/lsk_processed.json', 'temp/lsk_data.json')
+# if '-buff' in sys.argv:
+#     #csm_data_preprocess('temp/csm_cache.json')
+#     get_buff_data()
 if '-full' in sys.argv:
     csm_data_preprocess('temp/csm_cache.json')
     #csm_data_process('temp/csm_cache.json', 'temp/csm_data.json')
