@@ -1,5 +1,4 @@
 requests
-regex
-json
+selenium
 openpyxl
 numpy

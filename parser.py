@@ -1,4 +1,5 @@
 import sys
+import os
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
@@ -8,7 +9,8 @@ from openpyxl.formatting.rule import ColorScaleRule
 from openpyxl.utils import get_column_letter
 
 
-import os
+os.mkdir("temp", exist_ok=True) 
+#kek
 
 from data import *
 
